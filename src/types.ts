@@ -9,9 +9,9 @@ export type KeycloakConfig = {
 export interface AuthContextType {
   initialized: boolean;
   authenticated: boolean;
-  idToken: string;
-  token: string;
-  refreshToken: string;
+  idToken: string; // openid token
+  token: string; // access token
+  refreshToken: string; // refresh token
   useAxios: (baseURL: string) => AxiosInstance;
   login: () => void;
   logout: () => void;

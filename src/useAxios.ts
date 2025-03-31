@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import axios, { AxiosInstance } from "axios";
 
-import { useAuth } from "./useAuth";
+import { useSingleSignOn } from "./useSingleSignOn";
 
 const createAxiosInstance = (
   baseURL: string,
@@ -24,7 +24,7 @@ const createAxiosInstance = (
  * @returns The Axios instance
  */
 export const useAxios = (baseURL: string): AxiosInstance => {
-  const { initialized, authenticated, token } = useAuth();
+  const { initialized, authenticated, token } = useSingleSignOn();
 
   const axiosInstanceRef = useRef<AxiosInstance>(
     createAxiosInstance(baseURL, initialized, authenticated, token)

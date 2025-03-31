@@ -6,7 +6,7 @@ export type KeycloakConfig = {
   clientId: string;
 };
 
-export interface AuthContextType {
+export interface SingleSignOnContextType {
   initialized: boolean;
   authenticated: boolean;
   idToken: string; // openid token

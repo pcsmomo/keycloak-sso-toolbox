@@ -2,24 +2,30 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import Keycloak from "keycloak-js";
 
 // Contexts
-import { AuthContext, defaultAuthContext } from "./context";
+import { SingleSignOnContext, defaultSingleSignOnContext } from "./context";
 
 // Hooks
 import { useAxios } from "./useAxios";
 
 // Types
-import { AuthContextType, KeycloakConfig } from "./types";
+import { SingleSignOnContextType, KeycloakConfig } from "./types";
 
-interface AuthProviderProps {
+interface SingleSignOnProviderProps {
   children: ReactNode;
-  config: KeycloakConfig;
+  keycloakConfig: KeycloakConfig;
 }
 
-export const AuthProvider = ({ children, config }: AuthProviderProps) => {
-  const keycloak = useMemo(() => new Keycloak(config), [config]);
+export const SingleSignOnProvider = ({
+  children,
+  keycloakConfig,
+}: SingleSignOnProviderProps) => {
+  const keycloak = useMemo(
+    () => new Keycloak(keycloakConfig),
+    [keycloakConfig]
+  );
 
-  const [authContext, setAuthContext] =
-    useState<AuthContextType>(defaultAuthContext);
+  const [singleSignOnContext, setSingleSignOnContext] =
+    useState<SingleSignOnContextType>(defaultSingleSignOnContext);
 
   // Get the current useAxios implementation
   const currentUseAxios = useAxios;
@@ -37,16 +43,16 @@ export const AuthProvider = ({ children, config }: AuthProviderProps) => {
   // Update auth context when useAxios changes with authrization header
   useEffect(() => {
     // this would happen after keycloak.onAuthSuccess
-    if (authContext.authenticated) {
-      setAuthContext((prevContext) => ({
+    if (singleSignOnContext.authenticated) {
+      setSingleSignOnContext((prevContext) => ({
         ...prevContext,
         useAxios: currentUseAxios,
       }));
     }
-  }, [currentUseAxios, authContext.authenticated]);
+  }, [currentUseAxios, singleSignOnContext.authenticated]);
 
   keycloak.onAuthSuccess = () => {
-    setAuthContext({
+    setSingleSignOnContext({
       initialized: keycloak.didInitialize,
       authenticated: keycloak.authenticated ?? false,
       idToken: keycloak.idToken ?? "",
@@ -63,6 +69,8 @@ export const AuthProvider = ({ children, config }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
+    <SingleSignOnContext.Provider value={singleSignOnContext}>
+      {children}
+    </SingleSignOnContext.Provider>
   );
 };

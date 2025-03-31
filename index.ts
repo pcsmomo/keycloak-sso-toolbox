@@ -1,7 +1,7 @@
 export {
   type KeycloakConfig,
-  type AuthContextType,
-  AuthProvider,
-  useAuth,
+  type SingleSignOnContextType,
+  SingleSignOnProvider,
+  useSingleSignOn,
   useAxios,
 } from "./src";

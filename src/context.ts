@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { AuthContextType } from "./types";
+import { SingleSignOnContextType } from "./types";
 import { useAxios } from "./useAxios";
 
-export const defaultAuthContext: AuthContextType = {
+export const defaultSingleSignOnContext: SingleSignOnContextType = {
   initialized: false,
   authenticated: false,
   idToken: "",
@@ -16,4 +16,6 @@ export const defaultAuthContext: AuthContextType = {
 /**
  * Context for the Keycloak instance
  */
-export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
+export const SingleSignOnContext = createContext<SingleSignOnContextType>(
+  defaultSingleSignOnContext
+);
